@@ -1,170 +1,974 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediCally</title>
-    <link rel="shortcut icon" href="https://i.pinimg.com/736x/58/a7/79/58a779b802c8deac066ed0ceeae1c849.jpg"
-        type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css">
+    <title>A Simple Question</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --ivory: #F8F5F0;
+            --charcoal: #1A1A1A;
+            --gold: #D4AF37;
+            --dusty-rose: #B87C7C;
+            --slate: #6C7A89;
+        }
+        
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: var(--charcoal);
+            color: var(--ivory);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* Classic paper texture background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 20%),
+                radial-gradient(circle at 85% 30%, rgba(184, 124, 124, 0.02) 0%, transparent 20%);
+            z-index: -2;
+        }
+        
+        /* Subtle grid overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, rgba(248, 245, 240, 0.03) 1px, transparent 1px),
+                linear-gradient(rgba(248, 245, 240, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            opacity: 0.2;
+        }
+        
+        .container {
+            max-width: 680px;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 4px;
+            padding: 60px 50px;
+            position: relative;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(248, 245, 240, 0.05);
+            overflow: hidden;
+        }
+        
+        /* Classic border corners */
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+        }
+        
+        .corner-tl {
+            top: 20px;
+            left: 20px;
+            border-top: 1px solid var(--gold);
+            border-left: 1px solid var(--gold);
+        }
+        
+        .corner-tr {
+            top: 20px;
+            right: 20px;
+            border-top: 1px solid var(--gold);
+            border-right: 1px solid var(--gold);
+        }
+        
+        .corner-bl {
+            bottom: 20px;
+            left: 20px;
+            border-bottom: 1px solid var(--gold);
+            border-left: 1px solid var(--gold);
+        }
+        
+        .corner-br {
+            bottom: 20px;
+            right: 20px;
+            border-bottom: 1px solid var(--gold);
+            border-right: 1px solid var(--gold);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: var(--ivory);
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+        
+        .subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--slate);
+            margin-top: 25px;
+            font-weight: 300;
+        }
+        
+        .central-element {
+            text-align: center;
+            margin: 50px 0;
+            position: relative;
+        }
+        
+        .ornament {
+            font-size: 4.5rem;
+            color: var(--gold);
+            opacity: 0.8;
+            animation: gentleGlow 4s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+        
+        .ornament:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        @keyframes gentleGlow {
+            0%, 100% { 
+                filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3));
+                transform: rotate(0deg);
+            }
+            50% { 
+                filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.5));
+                transform: rotate(5deg);
+            }
+        }
+        
+        .message-card {
+            background: rgba(248, 245, 240, 0.03);
+            border-radius: 2px;
+            padding: 45px 40px;
+            margin: 40px 0;
+            border-left: 3px solid var(--dusty-rose);
+            position: relative;
+        }
+        
+        .message-card::before {
+            content: '"';
+            position: absolute;
+            top: 30px;
+            left: 25px;
+            font-size: 4rem;
+            color: var(--gold);
+            opacity: 0.2;
+            font-family: serif;
+        }
+        
+        .message-text {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: rgba(248, 245, 240, 0.9);
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+        
+        .emphasis {
+            color: var(--gold);
+            font-style: italic;
+            position: relative;
+        }
+        
+        .emphasis::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+        
+        .response-section {
+            margin-top: 60px;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            padding: 18px 40px;
+            border: none;
+            border-radius: 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            background: transparent;
+            color: var(--ivory);
+            border: 1px solid rgba(248, 245, 240, 0.2);
+            min-width: 180px;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(248, 245, 240, 0.1), transparent);
+            transition: 0.5s;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .yes-btn {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        
+        .yes-btn:hover {
+            background: rgba(212, 175, 55, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+        }
+        
+        .maybe-btn:hover {
+            background: rgba(248, 245, 240, 0.05);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(248, 245, 240, 0.1);
+        }
+        
+        .signature {
+            text-align: center;
+            margin-top: 60px;
+            color: var(--slate);
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            position: relative;
+            padding-top: 20px;
+        }
+        
+        .signature::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--slate), transparent);
+        }
+        
+        /* Floating dust particles */
+        .dust {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            z-index: -1;
+        }
+        
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            max-width: 500px;
+            width: 90%;
+            background: rgba(26, 26, 26, 0.95);
+            padding: 50px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            position: relative;
+        }
+        
+        .modal-ornament {
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 30px;
+            animation: gentleGlow 4s ease-in-out infinite;
+        }
+        
+        .modal-text {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            color: rgba(248, 245, 240, 0.9);
+            margin-bottom: 35px;
+            font-weight: 300;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--slate);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--ivory);
+        }
+        
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid var(--gold);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: 2px;
+            animation: 
+                typing 3.5s steps(40, end),
+                blink-caret 0.75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--gold) }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 30px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .ornament {
+                font-size: 3.5rem;
+            }
+            
+            .message-card {
+                padding: 35px 25px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+        
+        /* Ink drop effect */
+        .ink-drop {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--gold);
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        /* Classic page curl effect */
+        .page-curl {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 0 40px 40px 0;
+            border-color: transparent rgba(212, 175, 55, 0.1) transparent transparent;
+            box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 </head>
-
 <body>
-    <div id="crsr"></div>
-    <div id="main">
-        <nav>
-            <div id="nav">
-                <div class="n-left">
-                    <h2>Medically</h2>
-                </div>
-                <div id="icon-menu">
-                    <ion-icon name="grid-outline" id="menu"></ion-icon>
-                </div>
-                <div class="n-right">
-                    <button>home</button>
-                    <button>about</button>
-                    <button>facillities</button>
-                    <button>laboratory</button>
-                    <button>clients</button>
-                    <button>contact</button>
-                </div>
-            </div>
-        </nav>
-        <div id="content">
-            <div id="bordor"></div>
-            <div id="l">
-                <h1>welcome to hospital</h1>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum accusantium quibusdam cum fuga, alias
-                    consequatur? Harum <br> blanditiis ea cumque voluptate amet numquam reprehenderit vitae suscipit?
-                </p>
-            </div>
-            <div id="r">
-                <button>read more</button>
+    <!-- Corner decorations -->
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+    
+    <!-- Page curl effect -->
+    <div class="page-curl"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>A Thought</h1>
+            <div class="subtitle">IN ALL SIMPLICITY</div>
+        </div>
+        
+        <div class="central-element">
+            <div class="ornament" id="ornament">❖</div>
+        </div>
+        
+        <div class="message-card">
+            <div class="message-text">
+                <p>I find myself thinking of you often,</p>
+                <p>wondering if you might feel the same gentle curiosity.</p>
+                <p>There's a quiet <span class="emphasis">possibility</span> here,</p>
+                <p>should you wish to explore it with me.</p>
+                <p style="margin-top: 25px; font-size: 1.1rem;">No expectations, just genuine interest.</p>
             </div>
         </div>
-        <div id="content-p2">
-            <div id="header1">
-                <i class="ri-heart-fill"></i>
-                <h2>transplant</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br> Labore tempora, fugit quae iure id
-                    dolorem?</p>
+        
+        <div class="response-section">
+            <div class="typewriter" style="width: fit-content; margin: 0 auto 30px;">
+                What are your thoughts?
             </div>
-            <div id="header2">
-                <i class="ri-truck-fill"></i>
-                <h2>emergency</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br> Labore tempora, fugit quae iure id
-                    dolorem?</p>
-            </div>
-            <div id="header3">
-                <i class="ri-heart-pulse-fill"></i>
-                <h2>client care</h2>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. <br> Labore tempora, fugit quae iure id
-                    dolorem?</p>
+            
+            <div class="buttons">
+                <button class="btn yes-btn" id="yesBtn">
+                    <i class="fas fa-feather-alt" style="margin-right: 10px;"></i> I'm Inclined
+                </button>
+                <button class="btn maybe-btn" id="maybeBtn">
+                    <i class="fas fa-hourglass-half" style="margin-right: 10px;"></i> I'll Consider
+                </button>
             </div>
         </div>
-        <div id="c-content">
-            <div id="con-img">
-                <img src="https://p.w3layouts.com/demos_new/template_demo/10-01-2018/medically-demo_Free/1061846007/web/images/a1.jpg"
-                    alt="">
-            </div>
-            <div id="con-txt">
-                <h1>who are we?</h1>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Optio vel et <br> temporibus saepe enim
-                    officia, odio fugiat voluptatem necessitatibus soluta quia <br> omnis ipsam debitis vero minima
-                    earum hic, facilis nesciunt impedit. Eos <br> harum officiis veniam totam qui, quo beatae atque
-                    eaque fugit <br> assumenda minima libero esse mollitia earum doloribus expedita. Lorem ipsum <br>
-                    dolor sit amet consectetur adipisicing elit. Mollitia, ad ex rem et accusamus doloremque asperiores
-                    labore? Pariatur, natus nihil.</p>
-                <button>read more</button>
-            </div>
+        
+        <div class="signature">
+            With sincerity
         </div>
-        <div id="our-specialists">
-            <div id="h1">
-                <h1>OUR-SPECIALIST</h1>
+    </div>
+    
+    <!-- Yes Modal -->
+    <div class="modal" id="yesModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeYes">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-ornament">✧</div>
+            <h2 style="font-size: 2rem; margin-bottom: 20px; font-weight: 400; color: var(--gold);">
+                Delighted
+            </h2>
+            <div class="modal-text">
+                <p>That makes me genuinely happy.</p>
+                <p>Let's take this at a comfortable pace,</p>
+                <p>with honesty and mutual respect.</p>
             </div>
-            <div id="our-img">
-                <img id="img1" src="https://i.pinimg.com/736x/06/fd/03/06fd032b7b53f7575d8f229e62758e20.jpg" alt="">
-                <img id="img2" src="161f4631-a7df-42e3-869e-cfe46a6fae0f.jpeg" alt="">
-                <img id="img3" src="https://i.pinimg.com/736x/86/fd/d6/86fdd613f045a07c8f49a97fbdd58333.jpg" alt="">
-            </div>
+            <button class="btn yes-btn" id="continueBtn" style="margin-top: 10px;">
+                <i class="fas fa-heart" style="margin-right: 10px;"></i> Agreed
+            </button>
         </div>
-        <!-- <div id="contact-us">
-            <div id="heading">
-                <h1 id="heading-">contact us</h1>
+    </div>
+    
+    <!-- Maybe Modal -->
+    <div class="modal" id="maybeModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeMaybe">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-ornament">⌛</div>
+            <h2 style="font-size: 2rem; margin-bottom: 20px; font-weight: 400; color: var(--slate);">
+                Understood
+            </h2>
+            <div class="modal-text">
+                <p>I appreciate your consideration.</p>
+                <p>Take all the time you need —</p>
+                <p>there's no urgency, only patience.</p>
             </div>
-            <div id="address">
-                <h4 id="add">contact address</h4>
-                <p id="add-p">Lorem ipsum dolor sit amet, consectetur <br> adipisicing elit. Debitis culpa accusamus
-                    expedita iusto soluta <br> .</p>
-                <h4 id="address-23">address</h4>
-                <p id="add-23">333 Broome st new york NY 10002</p>
-                <h4 id="phone">phones</h4>
-                <p id="phone-p"> +9900887766</p>
-                <p id="phone-p"> +9900887766</p>
-                <div id="type"></div>
-                <input type placeholder="Name">
-                <input id="nd" type placeholder="Last Name"><br>
-                <input type placeholder="email">
-                <input id="4th" type placeholder="Phone"><br>
-                <input id="spe" type placeholder="Message">
-                <button id="sub">Submit</button>
-            </div>
-
-        </div> -->
-        <div id="footer">
-            <div id="f-nav">
-                <a href="#">home</a>
-                <a href="#">about</a>
-                <a href="#">facillities</a>
-                <a href="#">laboratory</a>
-                <a href="#">contact</a>
-            </div>
-            <div id="f-btm">
-                <div id="f-btm1">
-                    <h1>medically</h1>
-                    <p>Lorem ipsum</p>
-                </div>
-                <div id="f-btm2">
-                    <h1>follow us</h1>
-                    <i class="ri-facebook-fill"></i>
-                    <i class="ri-twitter-fill"></i>
-                    <i class="ri-linkedin-fill"></i>
-                </div>
-                <div id="f-btm3">
-                    <h1>about us</h1>
-                    <p>Lorem ipsum dolor sit<br>elit. Dicta, perspiciatis!</p>
-                </div>
-                <div id="f-btm4">
-                    <h1>contact-us</h1>
-                    <p>Call us:+9900887766</p>
-                    <p>Call us:+9900887766</p>
-                </div>
-            </div>
-            <div id="copyright">
-                <p> &#169; Medically. All rights Reserved <br> Design by <span>W3Layouts</span></p>
-            </div>
+            <button class="btn maybe-btn" id="reconsiderBtn" style="margin-top: 10px;">
+                <i class="fas fa-redo" style="margin-right: 10px;"></i> On Second Thought
+            </button>
         </div>
     </div>
 
-    </div>
-
-
-
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@3.5.4/dist/locomotive-scroll.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"
-        integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"
-        integrity="sha512-Ic9xkERjyZ1xgJ5svx3y0u3xrvfT/uPkV99LBwe68xjy/mGtO+4eURHZBW2xW4SZbFrF1Tf090XqB+EVgXnVjw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="script.js"></script>
+    <script>
+        // Create floating dust particles
+        function createDust() {
+            const dust = document.createElement('div');
+            dust.classList.add('dust');
+            
+            // Random position
+            dust.style.left = `${Math.random() * 100}%`;
+            dust.style.top = `${Math.random() * 100}%`;
+            
+            // Random size
+            const size = Math.random() * 3 + 1;
+            dust.style.width = `${size}px`;
+            dust.style.height = `${size}px`;
+            
+            // Random opacity
+            dust.style.opacity = Math.random() * 0.4 + 0.1;
+            
+            document.body.appendChild(dust);
+            
+            // Animation
+            const duration = Math.random() * 30 + 20;
+            const delay = Math.random() * 5;
+            
+            // Float animation
+            dust.animate([
+                { 
+                    transform: `translate(0, 0) rotate(0deg)`,
+                    opacity: dust.style.opacity 
+                },
+                { 
+                    transform: `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(${Math.random() * 360}deg)`,
+                    opacity: 0 
+                }
+            ], {
+                duration: duration * 1000,
+                delay: delay * 1000,
+                easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+            });
+            
+            // Remove after animation
+            setTimeout(() => {
+                if (dust.parentNode) {
+                    document.body.removeChild(dust);
+                }
+            }, (duration + delay) * 1000);
+        }
+        
+        // Create initial dust
+        for (let i = 0; i < 30; i++) {
+            setTimeout(createDust, i * 300);
+        }
+        
+        // Continue creating dust
+        setInterval(createDust, 2000);
+        
+        // Ornament interaction
+        const ornament = document.getElementById('ornament');
+        const ornaments = ['❖', '✧', '✦', '❈', '✶', '✺'];
+        let ornamentIndex = 0;
+        
+        ornament.addEventListener('click', function() {
+            // Cycle through ornaments
+            ornamentIndex = (ornamentIndex + 1) % ornaments.length;
+            this.textContent = ornaments[ornamentIndex];
+            
+            // Create ink drop effect
+            createInkDrop(this.getBoundingClientRect());
+            
+            // Create golden particles
+            createGoldenParticles(this.getBoundingClientRect());
+        });
+        
+        function createInkDrop(rect) {
+            const drop = document.createElement('div');
+            drop.classList.add('ink-drop');
+            drop.style.left = `${rect.left + rect.width/2}px`;
+            drop.style.top = `${rect.top + rect.height/2}px`;
+            
+            document.body.appendChild(drop);
+            
+            // Animate the ink drop
+            drop.animate([
+                { 
+                    transform: 'translate(-50%, -50%) scale(0)',
+                    opacity: 0.8 
+                },
+                { 
+                    transform: 'translate(-50%, -50%) scale(3)',
+                    opacity: 0 
+                }
+            ], {
+                duration: 1500,
+                easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+            });
+            
+            setTimeout(() => {
+                if (drop.parentNode) {
+                    document.body.removeChild(drop);
+                }
+            }, 1500);
+        }
+        
+        function createGoldenParticles(rect) {
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.style.position = 'fixed';
+                    particle.style.width = '2px';
+                    particle.style.height = '2px';
+                    particle.style.background = 'var(--gold)';
+                    particle.style.borderRadius = '50%';
+                    particle.style.left = `${rect.left + rect.width/2}px`;
+                    particle.style.top = `${rect.top + rect.height/2}px`;
+                    particle.style.zIndex = '1000';
+                    particle.style.pointerEvents = 'none';
+                    
+                    document.body.appendChild(particle);
+                    
+                    // Random direction
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 40 + Math.random() * 60;
+                    const endX = Math.cos(angle) * distance;
+                    const endY = Math.sin(angle) * distance;
+                    
+                    particle.animate([
+                        { 
+                            transform: 'translate(-50%, -50%) scale(1)',
+                            opacity: 0.8 
+                        },
+                        { 
+                            transform: `translate(calc(-50% + ${endX}px), calc(-50% + ${endY}px)) scale(0)`,
+                            opacity: 0 
+                        }
+                    ], {
+                        duration: 1000,
+                        easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                    });
+                    
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            document.body.removeChild(particle);
+                        }
+                    }, 1000);
+                }, i * 50);
+            }
+        }
+        
+        // Button functionality
+        const yesBtn = document.getElementById('yesBtn');
+        const maybeBtn = document.getElementById('maybeBtn');
+        const yesModal = document.getElementById('yesModal');
+        const maybeModal = document.getElementById('maybeModal');
+        const closeYes = document.getElementById('closeYes');
+        const closeMaybe = document.getElementById('closeMaybe');
+        const continueBtn = document.getElementById('continueBtn');
+        const reconsiderBtn = document.getElementById('reconsiderBtn');
+        
+        // Yes button
+        yesBtn.addEventListener('click', function() {
+            // Create elegant effect
+            createElegantEffect(this.getBoundingClientRect(), 'var(--gold)');
+            
+            // Show modal with delay
+            setTimeout(() => {
+                yesModal.classList.add('active');
+            }, 300);
+            
+            // Update signature
+            document.querySelector('.signature').textContent = 'With appreciation';
+            document.querySelector('.signature').style.color = 'var(--gold)';
+        });
+        
+        // Maybe button
+        maybeBtn.addEventListener('click', function() {
+            // Create subtle effect
+            createElegantEffect(this.getBoundingClientRect(), 'var(--slate)');
+            
+            // Show modal with delay
+            setTimeout(() => {
+                maybeModal.classList.add('active');
+            }, 300);
+            
+            // Update signature
+            document.querySelector('.signature').textContent = 'With understanding';
+            document.querySelector('.signature').style.color = 'var(--slate)';
+        });
+        
+        // Close buttons
+        closeYes.addEventListener('click', () => {
+            yesModal.classList.remove('active');
+        });
+        
+        closeMaybe.addEventListener('click', () => {
+            maybeModal.classList.remove('active');
+        });
+        
+        // Continue button
+        continueBtn.addEventListener('click', () => {
+            // Create celebration effect
+            createCelebrationEffect();
+            
+            // Update main content
+            ornament.textContent = '✧';
+            document.querySelector('.message-text').innerHTML = `
+                <p>Then it's settled.</p>
+                <p>Let's see where this path leads us,</p>
+                <p>step by step, with open hearts.</p>
+                <p style="margin-top: 25px; font-size: 1.1rem; color: var(--gold);">I'll be in touch soon.</p>
+            `;
+            
+            // Close modal
+            yesModal.classList.remove('active');
+            
+            // Show final message
+            setTimeout(() => {
+                createFloatingMessage("Perfect. Until we speak again.");
+            }, 500);
+        });
+        
+        // Reconsider button
+        reconsiderBtn.addEventListener('click', () => {
+            maybeModal.classList.remove('active');
+            setTimeout(() => {
+                yesModal.classList.add('active');
+            }, 300);
+        });
+        
+        // Close modals when clicking outside
+        document.addEventListener('click', (e) => {
+            if (yesModal.classList.contains('active') && 
+                !yesModal.contains(e.target) && 
+                e.target !== yesBtn) {
+                yesModal.classList.remove('active');
+            }
+            
+            if (maybeModal.classList.contains('active') && 
+                !maybeModal.contains(e.target) && 
+                e.target !== maybeBtn) {
+                maybeModal.classList.remove('active');
+            }
+        });
+        
+        // Create elegant button effect
+        function createElegantEffect(rect, color) {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const line = document.createElement('div');
+                    line.style.position = 'fixed';
+                    line.style.width = '1px';
+                    line.style.height = '30px';
+                    line.style.background = color;
+                    line.style.left = `${rect.left + rect.width/2}px`;
+                    line.style.top = `${rect.top + rect.height/2}px`;
+                    line.style.zIndex = '1000';
+                    line.style.pointerEvents = 'none';
+                    line.style.opacity = '0.7';
+                    
+                    document.body.appendChild(line);
+                    
+                    // Random angle
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 20 + Math.random() * 40;
+                    const endX = Math.cos(angle) * distance;
+                    const endY = Math.sin(angle) * distance;
+                    
+                    line.animate([
+                        { 
+                            transform: 'translate(-50%, -50%) rotate(0deg)',
+                            opacity: 0.7,
+                            height: '30px'
+                        },
+                        { 
+                            transform: `translate(calc(-50% + ${endX}px), calc(-50% + ${endY}px)) rotate(180deg)`,
+                            opacity: 0,
+                            height: '0px'
+                        }
+                    ], {
+                        duration: 800,
+                        easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                    });
+                    
+                    setTimeout(() => {
+                        if (line.parentNode) {
+                            document.body.removeChild(line);
+                        }
+                    }, 800);
+                }, i * 60);
+            }
+        }
+        
+        // Create celebration effect
+        function createCelebrationEffect() {
+            // Golden shower
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const spark = document.createElement('div');
+                    spark.style.position = 'fixed';
+                    spark.style.width = '1px';
+                    spark.style.height = '20px';
+                    spark.style.background = 'var(--gold)';
+                    spark.style.left = `${Math.random() * 100}%`;
+                    spark.style.top = '-20px';
+                    spark.style.zIndex = '999';
+                    spark.style.pointerEvents = 'none';
+                    spark.style.opacity = '0.8';
+                    
+                    document.body.appendChild(spark);
+                    
+                    spark.animate([
+                        { 
+                            transform: 'translateY(0) rotate(0deg)',
+                            opacity: 0.8 
+                        },
+                        { 
+                            transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`,
+                            opacity: 0 
+                        }
+                    ], {
+                        duration: 2000 + Math.random() * 1000,
+                        easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                    });
+                    
+                    setTimeout(() => {
+                        if (spark.parentNode) {
+                            document.body.removeChild(spark);
+                        }
+                    }, 3000);
+                }, i * 40);
+            }
+        }
+        
+        // Create floating message
+        function createFloatingMessage(text) {
+            const message = document.createElement('div');
+            message.textContent = text;
+            message.style.position = 'fixed';
+            message.style.top = '50%';
+            message.style.left = '50%';
+            message.style.transform = 'translate(-50%, -50%)';
+            message.style.background = 'rgba(26, 26, 26, 0.9)';
+            message.style.color = 'var(--gold)';
+            message.style.padding = '20px 30px';
+            message.style.border = '1px solid rgba(212, 175, 55, 0.3)';
+            message.style.fontSize = '1.1rem';
+            message.style.zIndex = '1001';
+            message.style.opacity = '0';
+            message.style.transition = 'opacity 0.5s';
+            
+            document.body.appendChild(message);
+            
+            // Fade in
+            setTimeout(() => {
+                message.style.opacity = '1';
+            }, 10);
+            
+            // Remove after delay
+            setTimeout(() => {
+                message.style.opacity = '0';
+                setTimeout(() => {
+                    if (message.parentNode) {
+                        document.body.removeChild(message);
+                    }
+                }, 500);
+            }, 3000);
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                yesModal.classList.remove('active');
+                maybeModal.classList.remove('active');
+            }
+            
+            if (e.key === 'y' || e.key === 'Y') {
+                yesBtn.click();
+            }
+            
+            if (e.key === 'm' || e.key === 'M') {
+                maybeBtn.click();
+            }
+        });
+        
+        // Add subtle mouse follower
+        document.addEventListener('mousemove', (e) => {
+            // Create subtle trailing effect
+            if (Math.random() > 0.7) {
+                const trail = document.createElement('div');
+                trail.style.position = 'fixed';
+                trail.style.width = '1px';
+                trail.style.height = '1px';
+                trail.style.background = 'rgba(212, 175, 55, 0.1)';
+                trail.style.borderRadius = '50%';
+                trail.style.left = `${e.clientX}px`;
+                trail.style.top = `${e.clientY}px`;
+                trail.style.zIndex = '-1';
+                trail.style.pointerEvents = 'none';
+                
+                document.body.appendChild(trail);
+                
+                trail.animate([
+                    { transform: 'scale(1)', opacity: 0.3 },
+                    { transform: 'scale(10)', opacity: 0 }
+                ], {
+                    duration: 1000,
+                    easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                });
+                
+                setTimeout(() => {
+                    if (trail.parentNode) {
+                        document.body.removeChild(trail);
+                    }
+                }, 1000);
+            }
+        });
+    </script>
 </body>
-
 </html>
